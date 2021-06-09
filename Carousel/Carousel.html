@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Carousel轮播</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .window{
+            width: 300px;
+            overflow: hidden;
+        }
+        .images{
+            display: flex;
+            align-items: flex-start;
+            transition: all 0.5s;
+        }
+        .images > img{
+            vertical-align: top;
+        }
+        .img{
+            width: 300px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+<div class="window">
+    <div class="images" id="images">
+        <img src="./image/image1.jpg" class="img">
+        <img src="./image/image2.jpg" class="img">
+        <img src="./image/image1.jpg" class="img">
+        <img src="./image/image2.jpg" class="img">
+    </div>
+    <div id=buttons class="active">
+        <span>第1张</span>
+        <span>第2张</span>
+        <span>第3张</span>
+        <span>第4张</span>
+    </div>
+</div>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+    var clickButtons = $('#buttons > span');
+    var image = $('#images > img');
+    var size = clickButtons.length;
+    var n = 0;
+    //先完成图标点击
+    for (let i = 0; i < size; i++) {
+        $(clickButtons[i]).on('click',function (e) {
+            var index = $(e.currentTarget).index();
+            var p = index * -300;
+            n = index;
+            // image.eq(n).addClass().siblings().removeClass()
+            clickButtons.eq(n).addClass('red').siblings('.red').removeClass('red');
+            $('#images').css({transform: 'translate(' + p + 'px)'})
+        })
+    }
+
+    //计时器
+    var timerId = setInterval(() => {
+        n += 1;
+        clickButtons.eq(n % size).trigger('click').addClass('red').siblings('.red').removeClass('red')
+    }, 1000);
+
+
+    //鼠标进入和离开
+    $('.window').on('mouseenter', function() {
+        window.clearInterval(timerId)
+    });
+    $('.window').on('mouseleave', function() {
+        timerId = setInterval(() => {
+            n += 1;
+            clickButtons.eq(n % size).trigger('click').addClass('red').siblings('.red').removeClass('red')
+        }, 1000)
+    })
+
+</script>
+</body>
+</html>
